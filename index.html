@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DocuFlow — Employee Document Management</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0,0" rel="stylesheet">
+<style>
+:root{--navy:#10233f;--blue:#2563eb;--blue2:#3b82f6;--bg:#f4f7fb;--card:#fff;--text:#182235;--muted:#6b7890;--line:#e5eaf1;--green:#159b67;--red:#dc3d4b;--shadow:0 12px 32px rgba(16,35,63,.08);--radius:18px}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--text)}
+button,input,textarea,select{font:inherit}button{cursor:pointer;border:0}.hidden{display:none!important}
+.app{min-height:100vh}.login{min-height:100vh;display:grid;place-items:center;padding:24px;background:linear-gradient(135deg,#0d2039,#1d4ed8)}
+.login-card{width:min(470px,100%);background:#fff;border-radius:26px;padding:34px;box-shadow:0 25px 70px rgba(0,0,0,.2)}
+.logo{display:flex;align-items:center;gap:11px;font-weight:800;font-size:21px}.logo-mark{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,#2563eb,#60a5fa);display:grid;place-items:center;color:white;font-weight:900}
+.login h1{margin:28px 0 8px;font-size:30px}.login p{color:var(--muted);margin:0 0 25px}.form-grid{display:grid;gap:15px}.field label{display:block;font-size:13px;font-weight:700;margin-bottom:7px}.field input,.field textarea,.field select{width:100%;border:1px solid var(--line);background:#fbfcfe;border-radius:12px;padding:12px 13px;outline:none;transition:.2s}.field textarea{min-height:90px;resize:vertical}.field input:focus,.field textarea:focus,.field select:focus{border-color:#8ab3ff;box-shadow:0 0 0 4px #dbeafe}.btn{border-radius:11px;padding:11px 16px;font-weight:750;transition:.2s}.btn:hover{transform:translateY(-1px)}.primary{background:var(--blue);color:#fff}.secondary{background:#eef4ff;color:#2456b8}.danger{background:#fff0f1;color:var(--red)}.ghost{background:transparent;color:var(--muted)}
+.layout{display:flex;min-height:100vh}.sidebar{width:250px;background:var(--navy);color:#c8d3e5;padding:22px 16px;position:fixed;inset:0 auto 0 0;z-index:20}.sidebar .logo{color:#fff;margin:3px 9px 32px}.nav{display:grid;gap:6px}.nav button{display:flex;align-items:center;gap:12px;width:100%;padding:12px 13px;border-radius:11px;background:transparent;color:#b9c6d9;text-align:left}.nav button.active,.nav button:hover{background:#1c3b62;color:#fff}.sidebar-foot{position:absolute;bottom:20px;left:16px;right:16px;border-top:1px solid #29405f;padding-top:16px}.main{margin-left:250px;width:calc(100% - 250px)}.topbar{height:78px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 30px;position:sticky;top:0;z-index:10}.top-left h2{margin:0;font-size:21px}.top-left span{font-size:12px;color:var(--muted)}.profile{display:flex;align-items:center;gap:11px}.avatar{width:38px;height:38px;border-radius:50%;background:#dbeafe;color:#1d4ed8;display:grid;place-items:center;font-weight:800}.profile small{display:block;color:var(--muted)}.content{padding:28px;max-width:1500px;margin:auto}.hero{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;gap:18px}.hero h1{margin:0 0 5px;font-size:28px}.hero p{margin:0;color:var(--muted)}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}.stat{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:19px;box-shadow:var(--shadow)}.stat-top{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;font-weight:700}.stat-icon{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;font-size:25px}.stat-icon.documents{background:#eef4ff;color:#2563eb}.stat-icon.today{background:#ecfdf5;color:#159b67}.stat-icon.mine{background:#f3e8ff;color:#9333ea}.stat-icon.comments{background:#fff7ed;color:#ea580c}.stat strong{display:block;font-size:27px;margin-top:14px}.toolbar{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:15px;display:flex;gap:10px;flex-wrap:wrap;margin-bottom:15px}.search{flex:1;min-width:220px}.search input,.toolbar select{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:10px;outline:none;background:#fbfcfe}.toolbar select{width:auto;min-width:145px}.table-wrap{background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:16px;border-bottom:1px solid var(--line);font-size:13px}th{background:#fbfcfe;color:#6d7890;font-size:12px;text-transform:uppercase;letter-spacing:.04em}tr:last-child td{border-bottom:0}.doc-name{font-weight:800}.sub{font-size:12px;color:var(--muted);margin-top:3px}.badge{display:inline-flex;padding:5px 8px;border-radius:8px;background:#edfdf6;color:#10825a;font-weight:700;font-size:11px}.actions{display:flex;gap:5px}.icon-btn{width:34px;height:34px;border-radius:9px;background:#f3f6fa;color:#4c5b70;display:grid;place-items:center}.icon-btn:hover{background:#e7effc;color:#1d4ed8}.icon-btn.del:hover{background:#fff0f1;color:var(--red)}.empty{text-align:center;padding:60px 20px;color:var(--muted)}.empty .big{font-size:42px;margin-bottom:10px}.modal-backdrop{position:fixed;inset:0;background:rgba(8,20,38,.58);display:grid;place-items:center;padding:18px;z-index:100;backdrop-filter:blur(4px)}.modal{background:#fff;width:min(650px,100%);max-height:92vh;overflow:auto;border-radius:20px;box-shadow:0 25px 80px rgba(0,0,0,.25);animation:pop .18s ease}.modal.large{width:min(900px,100%)}@keyframes pop{from{opacity:0;transform:scale(.97) translateY(8px)}to{opacity:1;transform:none}}.modal-head{display:flex;justify-content:space-between;align-items:center;padding:20px 22px;border-bottom:1px solid var(--line)}.modal-head h3{margin:0}.close{width:34px;height:34px;border-radius:9px;background:#f1f4f8;color:#58667a;font-size:20px}.modal-body{padding:22px}.modal-foot{display:flex;justify-content:flex-end;gap:10px;padding:16px 22px;border-top:1px solid var(--line)}.filebox{border:1.5px dashed #b9c8dc;border-radius:13px;padding:18px;text-align:center;background:#fafcff}.filebox input{margin-top:10px}.detail-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:22px}.preview{min-height:270px;border:1px solid var(--line);border-radius:14px;background:#f7f9fc;display:grid;place-items:center;overflow:hidden}.preview iframe,.preview img{width:100%;height:420px;border:0;object-fit:contain}.meta h2{margin:0 0 6px}.meta p{color:var(--muted);margin:5px 0 18px}.meta-row{padding:11px 0;border-bottom:1px solid var(--line)}.meta-row b{display:block;font-size:11px;text-transform:uppercase;color:#7a879a;margin-bottom:3px}.comments{margin-top:22px}.comment{padding:13px;border:1px solid var(--line);border-radius:12px;margin-top:10px;background:#fbfcfe}.comment-head{display:flex;justify-content:space-between}.comment-name{font-weight:800}.comment-role,.comment-date{font-size:11px;color:var(--muted)}.comment-text{margin:8px 0 0;line-height:1.5}.toast{position:fixed;right:22px;bottom:22px;background:#12243e;color:#fff;padding:13px 16px;border-radius:12px;box-shadow:0 12px 35px rgba(0,0,0,.2);z-index:200;animation:toast .2s ease}.toast.error{background:#a82835}@keyframes toast{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}.mobile-menu{display:none}
+.nav button .material-symbols-rounded{font-size:21px;flex:none}.sidebar-foot .nav{display:flex;align-items:center;gap:12px}.request-actions{display:flex;gap:8px;flex-wrap:wrap}.request-actions .btn{padding:8px 12px}.employee-remove{width:36px;height:36px;border-radius:9px;background:#fff0f1;color:var(--red);display:grid;place-items:center}.employee-remove:hover{background:#ffe0e3}.employee-remove .material-symbols-rounded{font-size:20px}
+.password-input-wrap{position:relative}.password-input-wrap input{padding-right:52px!important}.password-toggle{position:absolute;right:7px;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:9px;background:transparent;color:var(--muted);display:grid;place-items:center}.password-toggle:hover{background:#eef4ff;color:var(--blue)}.password-toggle .material-symbols-rounded{font-size:21px}
+.filebox input[type="file"]{display:block;width:100%;text-align:center;font-size:0;color:transparent}.filebox input[type="file"]::file-selector-button{display:block;margin:0 auto 8px;font-size:14px;color:#182235}.file-name{text-align:center;font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+.avatar{overflow:hidden;flex:none}.avatar img{width:100%;height:100%;object-fit:cover}.profile-card{max-width:680px;margin:0 auto;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:30px;box-shadow:var(--shadow)}.profile-picture-wrap{position:relative;width:136px;height:136px;margin:4px auto 27px}.profile-avatar{width:136px;height:136px;border:4px solid #fff;outline:3px solid #bfdbfe;border-radius:50%;background:#dbeafe;color:#1d4ed8;display:grid;place-items:center;overflow:hidden;font-size:38px;font-weight:800}.profile-avatar img{width:100%;height:100%;object-fit:cover}.profile-picture-edit{position:absolute;right:0;bottom:0;width:42px;height:42px;border:3px solid #fff;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;box-shadow:0 4px 12px rgba(16,35,63,.2)}.profile-picture-edit:hover{background:#1d4ed8}.profile-fields{display:grid;gap:16px}.profile-field label{display:block;font-size:13px;font-weight:700;margin-bottom:7px}.profile-field input{width:100%;border:1px solid var(--line);background:#f6f8fb;border-radius:12px;padding:12px 13px;color:var(--text);cursor:default}.profile-field input:focus{outline:2px solid #bfdbfe}
+@media(max-width:1050px){.stats{grid-template-columns:repeat(2,1fr)}.sidebar{width:220px}.main{margin-left:220px;width:calc(100% - 220px)}.detail-grid{grid-template-columns:1fr}}
+@media(max-width:760px){.sidebar{transform:translateX(-100%);transition:.25s;width:250px}.sidebar.open{transform:none}.main{margin-left:0;width:100%}.mobile-menu{display:grid;width:38px;height:38px;border-radius:9px;background:#eef4ff;color:#2456b8;place-items:center}.topbar{padding:0 15px}.top-left{display:flex;align-items:center;gap:10px}.profile .ptext{display:none}.content{padding:18px 14px}.hero{align-items:flex-start;flex-direction:column}.hero .btn{width:100%}.stats{grid-template-columns:repeat(2,1fr);gap:10px}.stat{padding:14px}.stat strong{font-size:23px}.table-wrap{border:0;background:transparent;box-shadow:none}.table-wrap table,.table-wrap thead,.table-wrap tbody,.table-wrap tr,.table-wrap td{display:block}.table-wrap thead{display:none}.table-wrap tr{background:#fff;border:1px solid var(--line);border-radius:15px;margin-bottom:11px;padding:8px;box-shadow:0 7px 20px rgba(16,35,63,.05)}.table-wrap td{border:0;padding:7px 9px}.table-wrap td[data-label]::before{content:attr(data-label);display:block;font-size:10px;text-transform:uppercase;color:#8a95a6;font-weight:800;margin-bottom:2px}.actions{padding-top:9px!important}.toolbar{padding:10px}.toolbar select{flex:1}.search{min-width:100%}.login-card{padding:26px}.modal-body{padding:17px}}
+.actions-wide{display:flex;gap:5px}.actions-compact{display:none;position:relative;flex:1;justify-content:flex-end}.action-menu{position:absolute;top:calc(100% + 6px);right:0;z-index:30;min-width:170px;padding:5px;background:#fff;border:1px solid var(--line);border-radius:11px;box-shadow:0 10px 28px rgba(16,35,63,.18)}.action-menu.open{display:grid}.action-menu.open-up{top:auto;bottom:calc(100% + 6px)}.action-menu button{display:flex;align-items:center;gap:10px;width:100%;padding:9px 11px;border-radius:8px;background:transparent;color:var(--text);text-align:left;white-space:nowrap;font-size:13px}.action-menu button:hover{background:#eef4ff;color:#1d4ed8}.action-menu button .material-symbols-rounded{font-size:19px}.action-menu button.delete-action:hover{background:#fff0f1;color:var(--red)}
+@media(max-width:1050px){.actions-wide{display:none}.actions-compact{display:flex}.table-wrap{overflow:visible}}
+</style>
+<style>
+.material-symbols-rounded{font-family:"Material Symbols Rounded";font-weight:normal;font-style:normal;font-size:20px;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr;-webkit-font-feature-settings:"liga";-webkit-font-smoothing:antialiased}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="modalRoot"></div>
+<div id="toastRoot"></div>
+
+<script>
+const KEY="docuflow_documents_v1", USER="docuflow_user_v1", EMPLOYEE_REGISTRY_KEY="docuflow_employee_registry_v1", PROFILE_IMAGES_KEY="docuflow_profile_images_v1", PASSWORD_ITERATIONS=120000;
+const SUPABASE_URL="", SUPABASE_ANON_KEY="";
+let documents=[], employees=[], employeeRequests=[], credentials={}, profileImages={}, currentUser=null;
+
+const sampleDocs=[
+ {id:"sample1",employeeName:"Amina Hassan",employeeRole:"Project Engineer",employeeEmail:"amina@example.com",employeeAddress:"Dar es Salaam",documentTitle:"Project Completion Report",description:"Final report for the Q3 engineering project.",fileName:"Project-Completion-Report.pdf",fileType:"application/pdf",fileSize:1240000,fileData:"",uploadDate:"2026-10-02T08:35:00",comments:[{id:"c1",commenterName:"Daniel Mushi",commenterRole:"Project Manager",comment:"Please review the final recommendations.",date:"2026-10-02T09:10:00"}]},
+ {id:"sample2",employeeName:"Daniel Mushi",employeeRole:"Project Manager",employeeEmail:"daniel@example.com",employeeAddress:"Dar es Salaam",documentTitle:"Safety Inspection",description:"Monthly workplace safety inspection document.",fileName:"Safety-Inspection.pdf",fileType:"application/pdf",fileSize:850000,fileData:"",uploadDate:"2026-10-01T14:20:00",comments:[]},
+ {id:"sample3",employeeName:"Neema Joseph",employeeRole:"Mechanical Engineer",employeeEmail:"neema@example.com",employeeAddress:"Arusha",documentTitle:"Equipment Maintenance Report",description:"Maintenance record for production equipment.",fileName:"Equipment-Maintenance.docx",fileType:"application/vnd.openxmlformats-officedocument.wordprocessingml.document",fileSize:520000,fileData:"",uploadDate:"2026-09-29T11:45:00",comments:[{id:"c3",commenterName:"Amina Hassan",commenterRole:"Project Engineer",comment:"The next service date should be highlighted.",date:"2026-09-30T08:15:00"}]}
+];
+
+function esc(v=""){return String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function uid(){return crypto.randomUUID?crypto.randomUUID():Date.now()+"_"+Math.random().toString(36).slice(2)}
+function fmtDate(d){return new Date(d).toLocaleDateString(undefined,{day:"2-digit",month:"short",year:"numeric"})}
+function fmtBytes(n){if(!n)return "—";const u=["B","KB","MB","GB"];let i=0,x=n;while(x>=1024&&i<3){x/=1024;i++}return x.toFixed(i?1:0)+" "+u[i]}
+function load(){
+  try{
+    const saved=localStorage.getItem(KEY);
+    documents=saved?JSON.parse(saved):sampleDocs;
+    if(!Array.isArray(documents) || documents.length===0) documents=sampleDocs;
+  }catch(e){documents=sampleDocs}
+  try{currentUser=JSON.parse(sessionStorage.getItem(USER)||"null")}catch(e){currentUser=null}
+  try{
+    const registry=JSON.parse(localStorage.getItem(EMPLOYEE_REGISTRY_KEY)||"{}");
+    employees=Array.isArray(registry.employees)?registry.employees:[];
+    employeeRequests=Array.isArray(registry.requests)?registry.requests:[];
+    credentials=registry.credentials&&typeof registry.credentials==="object"&&!Array.isArray(registry.credentials)?registry.credentials:{};
+  }catch(e){
+    employees=[];
+    employeeRequests=[];
+    credentials={};
+    toast("Employee records could not be loaded from browser storage.",true);
+  }
+  try{
+    const savedImages=JSON.parse(localStorage.getItem(PROFILE_IMAGES_KEY)||"{}");
+    profileImages=savedImages&&typeof savedImages==="object"&&!Array.isArray(savedImages)?savedImages:{};
+  }catch(e){
+    profileImages={};
+    toast("Profile pictures could not be loaded from browser storage.",true);
+  }
+}
+function persistEmployeeRegistry(){
+ try{localStorage.setItem(EMPLOYEE_REGISTRY_KEY,JSON.stringify({employees,requests:employeeRequests,credentials}))}
+ catch(e){toast("Employee records could not be saved. Check browser storage and try again.",true);return false}
+ return true;
+}
+async function createPasswordCredential(password){
+ if(!crypto.subtle)throw new Error("Password protection is unavailable in this browser.");
+ const salt=crypto.getRandomValues(new Uint8Array(16));
+ const key=await crypto.subtle.importKey("raw",new TextEncoder().encode(password),"PBKDF2",false,["deriveBits"]);
+ const bits=await crypto.subtle.deriveBits({name:"PBKDF2",salt,iterations:PASSWORD_ITERATIONS,hash:"SHA-256"},key,256);
+ return{salt:Array.from(salt,value=>value.toString(16).padStart(2,"0")).join(""),hash:Array.from(new Uint8Array(bits),value=>value.toString(16).padStart(2,"0")).join("")};
+}
+async function verifyPassword(password,credential){
+ if(!credential?.salt||!credential?.hash)return false;
+ const salt=Uint8Array.from(credential.salt.match(/.{2}/g)||[],value=>parseInt(value,16));
+ if(salt.length!==16)return false;
+ const key=await crypto.subtle.importKey("raw",new TextEncoder().encode(password),"PBKDF2",false,["deriveBits"]);
+ const bits=await crypto.subtle.deriveBits({name:"PBKDF2",salt,iterations:PASSWORD_ITERATIONS,hash:"SHA-256"},key,256);
+ const actual=Array.from(new Uint8Array(bits),value=>value.toString(16).padStart(2,"0")).join("");
+ return actual===credential.hash;
+}
+function isManager(user=currentUser){return user?.email?.trim().toLowerCase()==="admin@gmail.com"&&user?.role?.trim().toLowerCase()==="manager"}
+function canAccessDocument(document,user=currentUser){
+ if(!user)return false;
+ if(isManager(user))return true;
+ const email=String(user.email||"").trim().toLowerCase();
+ return email!==""&&String(document.employeeEmail||"").trim().toLowerCase()===email;
+}
+function accessibleDocuments(user=currentUser){return documents.filter(document=>canAccessDocument(document,user))}
+function employeeByEmail(email){return employees.find(employee=>employee.email.toLowerCase()===email.trim().toLowerCase())}
+function requestByEmail(email){return employeeRequests.find(request=>request.email.toLowerCase()===email.trim().toLowerCase()&&request.status==="pending")}
+function setCurrentUser(user){
+ const email=String(user.email||"").trim().toLowerCase();
+ currentUser={...user,profileImage:profileImages[email]||user.profileImage||""};
+ try{sessionStorage.setItem(USER,JSON.stringify(currentUser))}catch(e){toast("Your sign-in could not be saved for this session.",true)}
+}
+function persistProfileImages(){
+ try{localStorage.setItem(PROFILE_IMAGES_KEY,JSON.stringify(profileImages))}
+ catch(e){toast("Profile picture could not be saved. The image may be too large or browser storage may be full.",true);return false}
+ return true;
+}
+function initialsFor(user){return String(user?.name||"").trim().split(/\s+/).map(part=>part[0]).slice(0,2).join("").toUpperCase()}
+function avatarMarkup(user,className="avatar"){
+ return `<div class="${className}">${user.profileImage?`<img src="${esc(user.profileImage)}" alt="${esc(user.name)} profile picture">`:esc(initialsFor(user))}</div>`;
+}
+function persist(){
+  try{localStorage.setItem(KEY,JSON.stringify(documents))}
+  catch(e){window.__docuflowMemoryOnly=true;toast("Browser storage is unavailable; changes will last only for this session.",true)}
+}
+function toast(msg,error=false){const el=document.createElement("div");el.className="toast"+(error?" error":"");el.textContent=msg;document.getElementById("toastRoot").appendChild(el);setTimeout(()=>el.remove(),2800)}
+function openModal(title,body,foot="",cls=""){document.getElementById("modalRoot").innerHTML=`<div class="modal-backdrop" id="backdrop"><div class="modal ${cls}"><div class="modal-head"><h3>${title}</h3><button class="close" onclick="closeModal()">×</button></div><div class="modal-body">${body}</div>${foot?`<div class="modal-foot">${foot}</div>`:""}</div></div>`;document.getElementById("backdrop").addEventListener("click",e=>{if(e.target.id==="backdrop")closeModal()})}
+function closeModal(){document.getElementById("modalRoot").innerHTML=""}
+
+function loginScreen(){
+ const approvalNotice=new URLSearchParams(window.location.search).get("approved")==="1";
+ document.getElementById("app").innerHTML=`<main class="login"><section class="login-card">
+ <div class="logo"><span class="logo-mark">D</span> DocuFlow</div>
+<h1>${approvalNotice?"Account approved":"Welcome back"}</h1><p>${approvalNotice?"Your account has been approved. Sign in with your email and password to access DocuFlow.":"Sign in to your employee document hub."}</p>
+ <form class="form-grid" id="loginForm">
+ <div class="field"><label for="loginEmail">Email Address</label><input id="loginEmail" type="email" autocomplete="username" required placeholder="name@company.com"></div>
+ <div class="field"><label for="loginPassword">Password</label><div class="password-input-wrap"><input id="loginPassword" type="password" autocomplete="current-password" required><button class="password-toggle" type="button" aria-label="Show password" aria-pressed="false" onclick="togglePasswordVisibility('loginPassword',this)"><span class="material-symbols-rounded" aria-hidden="true">visibility</span></button></div></div>
+ <button class="btn primary" type="submit">Log In →</button>
+</form>
+<p style="text-align:center;margin:18px 0 0">Don't have an account? <button class="ghost" type="button" onclick="signUpScreen()">Sign up</button></p>
+</section></main>`;
+document.getElementById("loginForm").onsubmit=login;
+}
+function togglePasswordVisibility(inputId,button){
+ const input=document.getElementById(inputId);
+ if(!input)return;
+ const show=input.type==="password";
+ input.type=show?"text":"password";
+ button.setAttribute("aria-pressed",String(show));
+ button.setAttribute("aria-label",show?(button.dataset.hideLabel||"Hide password"):(button.dataset.showLabel||"Show password"));
+ button.querySelector(".material-symbols-rounded").textContent=show?"visibility_off":"visibility";
+}
+function signUpScreen(){
+document.getElementById("app").innerHTML=`<main class="login"><section class="login-card">
+<div class="logo"><span class="logo-mark">D</span> DocuFlow</div>
+<h1>Create your account</h1><p>Submit your details to request employee access.</p>
+<form class="form-grid" id="signUpForm">
+ <div class="field"><label for="signUpName">Full Name</label><input id="signUpName" autocomplete="name" required placeholder="e.g. John Doe"></div>
+ <div class="field"><label for="signUpRole">Role / Job Position</label><input id="signUpRole" autocomplete="organization-title" required placeholder="e.g. Mechanical Engineer"></div>
+ <div class="field"><label for="signUpEmail">Email Address</label><input id="signUpEmail" type="email" autocomplete="email" required placeholder="name@company.com"></div>
+ <div class="field"><label for="signUpPassword">Password</label><div class="password-input-wrap"><input id="signUpPassword" type="password" autocomplete="new-password" required><button class="password-toggle" type="button" aria-label="Show password" aria-pressed="false" onclick="togglePasswordVisibility('signUpPassword',this)"><span class="material-symbols-rounded" aria-hidden="true">visibility</span></button></div></div>
+ <div class="field"><label for="confirmSignUpPassword">Confirm Password</label><div class="password-input-wrap"><input id="confirmSignUpPassword" type="password" autocomplete="new-password" required><button class="password-toggle" type="button" aria-label="Show confirm password" aria-pressed="false" data-show-label="Show confirm password" data-hide-label="Hide confirm password" onclick="togglePasswordVisibility('confirmSignUpPassword',this)"><span class="material-symbols-rounded" aria-hidden="true">visibility</span></button></div></div>
+ <button class="btn primary" type="submit">Create Account →</button>
+ <div style="text-align:center;font-size:11px;color:#8a96a8;margin-top:2px">Your account must be approved by a manager before dashboard access.</div>
+</form>
+<p style="text-align:center;margin:18px 0 0">Already have an account? <button class="ghost" type="button" onclick="loginScreen()">Log in</button></p>
+</section></main>`;
+const passwordInput=document.getElementById("signUpPassword"),confirmPasswordInput=document.getElementById("confirmSignUpPassword");
+const validatePasswordMatch=()=>confirmPasswordInput.setCustomValidity(!confirmPasswordInput.value||passwordInput.value===confirmPasswordInput.value?"":"Passwords do not match.");
+passwordInput.addEventListener("input",validatePasswordMatch);
+confirmPasswordInput.addEventListener("input",validatePasswordMatch);
+document.getElementById("signUpForm").onsubmit=signUp;
+}
+async function signUp(event){
+event.preventDefault();
+const form=event.currentTarget;
+const password=document.getElementById("signUpPassword"),confirmPassword=document.getElementById("confirmSignUpPassword");
+confirmPassword.setCustomValidity(!confirmPassword.value||password.value===confirmPassword.value?"":"Passwords do not match.");
+if(!form.reportValidity())return;
+const submitButton=form.querySelector('button[type="submit"]');
+submitButton.disabled=true;
+const user={
+ name:document.getElementById("signUpName").value.trim(),
+ role:document.getElementById("signUpRole").value.trim(),
+ email:document.getElementById("signUpEmail").value.trim().toLowerCase(),
+ address:""
+};
+try{
+ if(user.email==="admin@gmail.com"){toast("This email is reserved for the manager account.",true);return}
+ if(credentials[user.email]||employeeByEmail(user.email)||employeeRequests.some(request=>request.email.toLowerCase()===user.email)){
+  toast("An account already exists for this email. Please log in.",true);return;
+ }
+ const credential=await createPasswordCredential(password.value);
+ const request={...user,id:uid(),requestDate:new Date().toISOString(),status:"pending"};
+ credentials[user.email]=credential;
+ employeeRequests.unshift(request);
+ if(!persistEmployeeRegistry()){
+  employeeRequests.shift();
+  delete credentials[user.email];
+  return;
+ }
+ setCurrentUser(request);
+ showRequestStatus();
+}catch(error){
+ toast(error instanceof Error?error.message:"Account could not be created.",true);
+}finally{
+ if(submitButton.isConnected)submitButton.disabled=false;
+}
+}
+async function login(event){
+event.preventDefault();
+const form=event.currentTarget;
+if(!form.reportValidity())return;
+const submitButton=form.querySelector('button[type="submit"]');
+submitButton.disabled=true;
+const email=document.getElementById("loginEmail").value.trim().toLowerCase();
+const password=document.getElementById("loginPassword").value;
+try{
+ if(email==="admin@gmail.com"&&password==="admin"){
+  setCurrentUser({name:"Admin",role:"Manager",email,address:""});
+  renderApp();
+  return;
+ }
+ const credential=credentials[email];
+ if(!credential){toast("No account found for this email. Sign up first.",true);return}
+ if(!await verifyPassword(password,credential)){toast("Incorrect email or password.",true);return}
+ const approvedEmployee=employeeByEmail(email);
+ if(approvedEmployee){
+  setCurrentUser(approvedEmployee);
+  renderApp();
+  setTimeout(()=>toast("Welcome, "+currentUser.name),100);
+  return;
+ }
+ const request=employeeRequests.find(item=>item.email.toLowerCase()===email);
+ if(request?.status==="pending"){
+  setCurrentUser(request);
+  showRequestStatus();
+  return;
+ }
+ if(request?.status==="rejected"){
+  const reapplication={...request,requestDate:new Date().toISOString(),status:"pending"};
+  employeeRequests=employeeRequests.map(item=>item.id===request.id?reapplication:item);
+  if(!persistEmployeeRegistry())return;
+  setCurrentUser(reapplication);
+  showRequestStatus();
+  toast("Your new access request is awaiting approval.");
+  return;
+ }
+ toast("This account has no active employee access. Contact the manager.",true);
+}catch(error){
+ toast(error instanceof Error?error.message:"Sign-in could not be completed.",true);
+}finally{
+ if(submitButton.isConnected)submitButton.disabled=false;
+}
+}
+
+function renderApp(){
+ const manager=isManager();
+ const navigation=manager
+  ?`<button data-page="dashboard" class="active" onclick="showDashboard()"><span class="material-symbols-rounded" aria-hidden="true">dashboard</span><span>Dashboard</span></button><button onclick="focusUpload()"><span class="material-symbols-rounded" aria-hidden="true">upload_file</span><span>Upload Document</span></button><button data-page="my-documents" onclick="showMyDocs()"><span class="material-symbols-rounded" aria-hidden="true">folder_open</span><span>My Documents</span></button><button data-page="my-profile" onclick="showMyProfile()"><span class="material-symbols-rounded" aria-hidden="true">account_circle</span><span>My Profile</span></button><button data-page="requests" onclick="showRequests()"><span class="material-symbols-rounded" aria-hidden="true">how_to_reg</span><span>Requests</span></button><button data-page="employees" onclick="showEmployees()"><span class="material-symbols-rounded" aria-hidden="true">groups</span><span>Employees</span></button>`
+  :`<button data-page="my-documents" class="active" onclick="showMyDocs()"><span class="material-symbols-rounded" aria-hidden="true">folder_open</span><span>My Documents</span></button><button onclick="focusUpload()"><span class="material-symbols-rounded" aria-hidden="true">upload_file</span><span>Upload Document</span></button><button data-page="my-profile" onclick="showMyProfile()"><span class="material-symbols-rounded" aria-hidden="true">account_circle</span><span>My Profile</span></button>`;
+ document.getElementById("app").innerHTML=`<div class="layout">
+ <aside class="sidebar" id="sidebar"><div class="logo"><span class="logo-mark">D</span> DocuFlow</div>
+ <nav class="nav">${navigation}</nav>
+ <div class="sidebar-foot"><button class="nav" style="background:transparent;color:#b9c6d9;width:100%;padding:10px" onclick="logout()"><span class="material-symbols-rounded" aria-hidden="true">logout</span><span>Sign out</span></button></div></aside>
+ <main class="main"><header class="topbar"><div class="top-left"><button class="mobile-menu" onclick="toggleSide()">☰</button><div><h2>Document Management</h2><span>Employee workspace</span></div></div><div class="profile">${avatarMarkup(currentUser)}<div class="ptext"><b>${esc(currentUser.name)}</b><small>${esc(currentUser.role)}</small></div></div></header>
+ <section class="content" id="pageContent"></section></main></div>`;
+ if(manager)showDashboard();else showMyDocs();
+}
+function setActivePage(page){
+ document.querySelectorAll("[data-page]").forEach(button=>button.classList.toggle("active",button.dataset.page===page));
+ document.getElementById("sidebar").classList.remove("open");
+}
+function showDashboard(){
+ if(!currentUser)return;
+ if(!isManager()){showMyDocs();return}
+ setActivePage("dashboard");
+ document.getElementById("pageContent").innerHTML=`<div class="hero"><div><h1>Good day, ${esc(currentUser.name.split(" ")[0])}</h1><p>Manage your team's documents and keep feedback organized.</p></div><button class="btn primary" onclick="openUpload()">＋ Upload Document</button></div>
+ <div class="stats" id="stats"></div>
+ <div class="toolbar"><div class="search"><input id="search" placeholder="Search documents, employees, descriptions..." oninput="renderDocs()"></div><select id="sort" onchange="renderDocs()"><option value="new">Newest first</option><option value="old">Oldest first</option><option value="title">Title A–Z</option><option value="employee">Employee A–Z</option></select></div>
+ <div class="table-wrap"><table><thead><tr><th>Employee</th><th>Document</th><th>Date</th><th>Actions</th></tr></thead><tbody id="docBody"></tbody></table></div>
+ <p style="text-align:center;color:#8995a7;font-size:11px;margin:18px 0 0">DocuFlow browser prototype · Uploaded files and records are stored locally in this browser.</p>`;
+ renderStats();renderDocs();
+}
+function showRequests(){
+ if(!isManager()){showDashboard();return}
+ setActivePage("requests");
+ const requests=employeeRequests.filter(request=>request.status==="pending");
+ document.getElementById("pageContent").innerHTML=`<div class="hero"><div><h1>Employee Requests</h1><p>Review and respond to employee access requests.</p></div></div>
+ <div class="table-wrap"><table><thead><tr><th>Employee Name</th><th>Email</th><th>Date</th><th>Actions</th></tr></thead><tbody>${requests.length?requests.map(request=>`<tr><td data-label="Employee Name"><b>${esc(request.name)}</b></td><td data-label="Email">${esc(request.email)}</td><td data-label="Date">${fmtDate(request.requestDate)}</td><td data-label="Actions"><div class="request-actions"><button class="btn primary" onclick="approveRequest('${esc(request.id)}')">Approve</button><button class="btn danger" onclick="rejectRequest('${esc(request.id)}')">Reject</button></div></td></tr>`).join(""):`<tr><td colspan="4"><div class="empty"><div class="big">☷</div><b>No pending requests</b><p>New employee requests will appear here.</p></div></td></tr>`}</tbody></table></div>`;
+}
+function showEmployees(){
+ if(!isManager()){showDashboard();return}
+ setActivePage("employees");
+ document.getElementById("pageContent").innerHTML=`<div class="hero"><div><h1>Employees</h1><p>Employees approved to access DocuFlow.</p></div></div>
+ <div class="table-wrap"><table><thead><tr><th>Employee Name</th><th>Email</th><th>Date</th><th>Remove</th></tr></thead><tbody>${employees.length?employees.map(employee=>`<tr><td data-label="Employee Name"><b>${esc(employee.name)}</b></td><td data-label="Email">${esc(employee.email)}</td><td data-label="Date">${fmtDate(employee.requestDate)}</td><td data-label="Remove"><button class="employee-remove" type="button" title="Remove ${esc(employee.name)}" aria-label="Remove ${esc(employee.name)}" onclick="removeEmployee('${esc(employee.id)}')"><span class="material-symbols-rounded" aria-hidden="true">person_remove</span></button></td></tr>`).join(""):`<tr><td colspan="4"><div class="empty"><div class="big">♙</div><b>No approved employees yet</b></div></td></tr>`}</tbody></table></div>`;
+}
+function removeEmployee(id){
+ if(!isManager())return;
+ const employee=employees.find(item=>item.id===id);
+ if(!employee)return;
+ openModal("Remove Employee",`<p>Remove <b>${esc(employee.name)}</b> (${esc(employee.email)}) from the Employees list?</p><p class="sub">They will no longer be able to log in. Their uploaded documents will remain in DocuFlow.</p>`,`<button class="btn ghost" type="button" onclick="closeModal()">Cancel</button><button class="btn danger" type="button" onclick="confirmRemoveEmployee('${esc(employee.id)}')">Remove Employee</button>`);
+}
+function confirmRemoveEmployee(id){
+ if(!isManager())return;
+ const employee=employees.find(item=>item.id===id);
+ if(!employee)return;
+ const email=employee.email.trim().toLowerCase(),previousEmployees=employees,previousCredentials=credentials;
+ employees=employees.filter(item=>item.id!==id);
+ credentials={...credentials};
+ delete credentials[email];
+ if(!persistEmployeeRegistry()){
+  employees=previousEmployees;
+  credentials=previousCredentials;
+  return;
+ }
+ closeModal();
+ showEmployees();
+ toast(`${employee.name} was removed from Employees.`);
+}
+function approveRequest(id){
+ if(!isManager())return;
+ const request=employeeRequests.find(item=>item.id===id&&item.status==="pending");
+ if(!request)return;
+ openModal("Approve Employee",`<p>Send an account approval email to <b>${esc(request.name)}</b> at <b>${esc(request.email)}</b>?</p><form id="approveRequestForm" class="form-grid"><div class="field"><label for="approvalPassword">Manager Password</label><div class="password-input-wrap"><input id="approvalPassword" type="password" autocomplete="current-password" required><button class="password-toggle" type="button" aria-label="Show password" onclick="togglePasswordVisibility('approvalPassword',this)"><span class="material-symbols-rounded" aria-hidden="true">visibility</span></button></div></div></form>`,`<button class="btn ghost" type="button" onclick="closeModal()">Cancel</button><button class="btn primary" type="submit" form="approveRequestForm">Send Email & Approve</button>`);
+ document.getElementById("approveRequestForm").onsubmit=event=>submitApproval(event,id);
+}
+async function submitApproval(event,id){
+ event.preventDefault();
+ if(!isManager())return;
+ const form=event.currentTarget;
+ if(!form.reportValidity())return;
+ const request=employeeRequests.find(item=>item.id===id&&item.status==="pending");
+ if(!request)return;
+ const managerPassword=document.getElementById("approvalPassword").value;
+ const submitButton=document.querySelector('#modalRoot button[type="submit"]');
+ submitButton.disabled=true;
+ try{
+  await sendApprovalEmail(request,managerPassword);
+  const previousEmployees=employees,previousRequests=employeeRequests;
+  if(!employeeByEmail(request.email))employees=[...employees,{id:request.id,name:request.name,role:request.role,email:request.email,address:request.address,requestDate:request.requestDate}];
+  employeeRequests=employeeRequests.filter(item=>item.id!==id);
+  if(!persistEmployeeRegistry()){
+   employees=previousEmployees;
+   employeeRequests=previousRequests;
+   toast("The email service accepted the message, but employee approval could not be saved. Do not resend until checking the employee list.",true);
+   return;
+  }
+  closeModal();showRequests();toast(`Approval email sent to ${request.email}.`);
+ }catch(error){
+  toast(error instanceof Error?error.message:"Approval email could not be sent. The employee was not approved.",true);
+ }finally{
+  if(submitButton.isConnected)submitButton.disabled=false;
+ }
+}
+async function sendApprovalEmail(employee,managerPassword){
+ if(!SUPABASE_URL||!SUPABASE_ANON_KEY)throw new Error("Approval email is not configured. Add the Supabase URL and anon key before approving employees.");
+ const response=await fetch(`${SUPABASE_URL.replace(/\/+$/,"")}/functions/v1/send-approval-email`,{
+  method:"POST",
+  headers:{"Content-Type":"application/json","apikey":SUPABASE_ANON_KEY,"Authorization":`Bearer ${SUPABASE_ANON_KEY}`},
+  body:JSON.stringify({managerEmail:currentUser.email,managerPassword,employee:{name:employee.name,email:employee.email}})
+ });
+ let result;
+ try{result=await response.json()}catch(error){throw new Error("Approval email service returned an invalid response.")}
+ if(!response.ok)throw new Error(result.error||"Approval email could not be sent.");
+}
+function rejectRequest(id){
+ if(!isManager())return;
+ const request=employeeRequests.find(item=>item.id===id&&item.status==="pending");
+ if(!request)return;
+ const previousRequests=employeeRequests;
+ employeeRequests=employeeRequests.map(item=>item.id===id?{...item,status:"rejected"}:item);
+ if(!persistEmployeeRegistry()){employeeRequests=previousRequests;return}
+ showRequests();toast(`${request.name}'s request was rejected.`);
+}
+function showRequestStatus(){
+ const request=employeeRequests.find(item=>item.email.toLowerCase()===currentUser.email.toLowerCase());
+ document.getElementById("app").innerHTML=`<main class="login"><section class="login-card"><div class="logo"><span class="logo-mark">D</span> DocuFlow</div><h1>Request submitted</h1><p>Your request to access DocuFlow is awaiting manager approval.</p><div class="field"><b>${esc(currentUser.name)}</b><div class="sub">${esc(currentUser.email)}</div><div class="sub">Submitted ${fmtDate(request?.requestDate||new Date().toISOString())}</div></div><div style="display:grid;gap:10px;margin-top:20px"><button class="btn primary" onclick="refreshRequestStatus()">Check request status</button><button class="btn ghost" onclick="logout()">Sign out</button></div></section></main>`;
+}
+function showRejectedRequest(){
+ document.getElementById("app").innerHTML=`<main class="login"><section class="login-card"><div class="logo"><span class="logo-mark">D</span> DocuFlow</div><h1>Request declined</h1><p>Your request was declined by a manager. You can submit a new request if needed.</p><div style="display:grid;gap:10px"><button class="btn primary" onclick="reapplyRequest()">Submit a new request</button><button class="btn ghost" onclick="logout()">Sign out</button></div></section></main>`;
+}
+function refreshRequestStatus(){
+ try{
+  const registry=JSON.parse(localStorage.getItem(EMPLOYEE_REGISTRY_KEY)||"{}");
+  employees=Array.isArray(registry.employees)?registry.employees:[];
+  employeeRequests=Array.isArray(registry.requests)?registry.requests:[];
+ }catch(e){toast("Request status could not be refreshed from browser storage.",true);return}
+ const approved=employeeByEmail(currentUser.email);
+ if(approved){setCurrentUser(approved);renderApp();toast("Your access request was approved.");return}
+ const request=employeeRequests.find(item=>item.email.toLowerCase()===currentUser.email.toLowerCase());
+ if(request?.status==="rejected"){setCurrentUser(request);showRejectedRequest();return}
+ if(request?.status==="pending"){showRequestStatus();toast("Your request is still awaiting approval.");return}
+ toast("No active request was found. Please sign in again.",true);logout();
+}
+function reapplyRequest(){
+ const request=employeeRequests.find(item=>item.email.toLowerCase()===currentUser.email.toLowerCase()&&item.status==="rejected");
+ if(!request){toast("No rejected request was found.",true);logout();return}
+ const previousRequests=employeeRequests;
+ const updatedRequest={...request,requestDate:new Date().toISOString(),status:"pending"};
+ employeeRequests=employeeRequests.map(item=>item.id===request.id?updatedRequest:item);
+ if(!persistEmployeeRegistry()){employeeRequests=previousRequests;return}
+ setCurrentUser(updatedRequest);
+ showRequestStatus();
+ toast("Your new access request is awaiting approval.");
+}
+function renderStats(){
+ const stats=document.getElementById("stats");if(!stats)return;
+ const visible=accessibleDocuments(),today=new Date().toISOString().slice(0,10),mine=documents.filter(d=>String(d.employeeEmail||"").trim().toLowerCase()===String(currentUser.email||"").trim().toLowerCase()).length,comments=visible.reduce((n,d)=>n+(d.comments||[]).length,0),todayN=visible.filter(d=>d.uploadDate.slice(0,10)===today).length;
+ stats.innerHTML=[
+ ["Total Documents",visible.length,"folder_open","documents"],["Uploaded Today",todayN,"upload_file","today"],["My Documents",mine,"person","mine"],["Total Comments",comments,"forum","comments"]
+ ].map(x=>`<div class="stat"><div class="stat-top"><span>${x[0]}</span><span class="stat-icon ${x[3]} material-symbols-rounded" aria-hidden="true">${x[2]}</span></div><strong>${x[1]}</strong></div>`).join("");
+}
+function renderDocs(sourceDocuments=accessibleDocuments(),emptyMessage="No documents found"){
+ const q=(document.getElementById("search")?.value||"").toLowerCase(), sort=document.getElementById("sort")?.value||"new";
+ let list=sourceDocuments.filter(d=>canAccessDocument(d)&&[d.employeeName,d.employeeEmail,d.documentTitle,d.fileName,d.description,d.employeeRole].join(" ").toLowerCase().includes(q));
+ list.sort((a,b)=>sort==="old"?new Date(a.uploadDate)-new Date(b.uploadDate):sort==="title"?a.documentTitle.localeCompare(b.documentTitle):sort==="employee"?a.employeeName.localeCompare(b.employeeName):new Date(b.uploadDate)-new Date(a.uploadDate));
+ const body=document.getElementById("docBody");if(!body)return;
+ body.innerHTML=list.length?list.map(d=>`<tr><td data-label="Employee"><b>${esc(d.employeeName)}</b><div class="sub">${esc(d.employeeRole)}</div></td><td data-label="Document"><div class="doc-name">${esc(d.documentTitle)}</div><div class="sub">${esc(d.fileName)}</div></td><td data-label="Date">${fmtDate(d.uploadDate)}</td><td data-label="Actions"><div class="actions"><div class="actions-wide"><button class="icon-btn" title="View" aria-label="View" onclick="viewDoc('${d.id}')"><span class="material-symbols-rounded" aria-hidden="true">visibility</span></button><button class="icon-btn" title="Download" aria-label="Download" onclick="downloadDoc('${d.id}')"><span class="material-symbols-rounded" aria-hidden="true">download</span></button><button class="icon-btn" title="Comment" aria-label="Comment" onclick="commentDoc('${d.id}')"><span class="material-symbols-rounded" aria-hidden="true">comment</span></button><button class="icon-btn" title="Information" aria-label="Information" onclick="infoDoc('${d.id}')"><span class="material-symbols-rounded" aria-hidden="true">info</span></button><button class="icon-btn del" title="Delete" aria-label="Delete" onclick="deleteDoc('${d.id}')"><span class="material-symbols-rounded" aria-hidden="true">delete</span></button></div><div class="actions-compact"><button class="icon-btn" title="Document actions" aria-label="Document actions" aria-haspopup="menu" aria-expanded="false" onclick="toggleDocumentActions(event,this)"><span class="material-symbols-rounded" aria-hidden="true">more_vert</span></button><div class="action-menu" role="menu"><button role="menuitem" onclick="runDocumentAction(event,'view','${d.id}')"><span class="material-symbols-rounded" aria-hidden="true">visibility</span><span>View</span></button><button role="menuitem" onclick="runDocumentAction(event,'download','${d.id}')"><span class="material-symbols-rounded" aria-hidden="true">download</span><span>Download</span></button><button role="menuitem" onclick="runDocumentAction(event,'comment','${d.id}')"><span class="material-symbols-rounded" aria-hidden="true">comment</span><span>Comment</span></button><button role="menuitem" onclick="runDocumentAction(event,'information','${d.id}')"><span class="material-symbols-rounded" aria-hidden="true">info</span><span>Information</span></button><button class="delete-action" role="menuitem" onclick="runDocumentAction(event,'delete','${d.id}')"><span class="material-symbols-rounded" aria-hidden="true">delete</span><span>Delete</span></button></div></div></div></td></tr>`).join(""):`<tr><td colspan="4"><div class="empty"><div class="big">▤</div><b>${esc(emptyMessage)}</b><p>Upload a document to see it listed here.</p><button class="btn primary" onclick="openUpload()">Upload Document</button></div></td></tr>`;
+}
+function closeDocumentActionMenus(){
+ document.querySelectorAll(".action-menu.open").forEach(menu=>menu.classList.remove("open","open-up"));
+ document.querySelectorAll('.actions-compact [aria-haspopup="menu"][aria-expanded="true"]').forEach(button=>button.setAttribute("aria-expanded","false"));
+}
+function toggleDocumentActions(event,button){
+ event.stopPropagation();
+ const menu=button.nextElementSibling,willOpen=!menu.classList.contains("open");
+ closeDocumentActionMenus();
+ if(willOpen){menu.classList.add("open");button.setAttribute("aria-expanded","true");if(window.innerHeight-button.getBoundingClientRect().bottom<menu.getBoundingClientRect().height+8)menu.classList.add("open-up")}
+}
+function runDocumentAction(event,action,id){
+ event.stopPropagation();
+ closeDocumentActionMenus();
+ if(action==="view")viewDoc(id);
+ else if(action==="download")downloadDoc(id);
+ else if(action==="comment")commentDoc(id);
+ else if(action==="information")infoDoc(id);
+ else if(action==="delete")deleteDoc(id);
+}
+function toggleSide(){document.getElementById("sidebar").classList.toggle("open")}
+function focusUpload(){document.getElementById("sidebar").classList.remove("open");openUpload()}
+function showMyDocs(){
+ if(!currentUser)return;
+ setActivePage("my-documents");
+ document.getElementById("pageContent").innerHTML=`<div class="hero"><div><h1>My Documents</h1><p>Documents uploaded by ${esc(currentUser.name)}.</p></div><button class="btn primary" onclick="openUpload()">＋ Upload Document</button></div>
+ <div class="toolbar"><div class="search"><input id="search" placeholder="Search your documents..." oninput="renderMyDocs()"></div><select id="sort" onchange="renderMyDocs()"><option value="new">Newest first</option><option value="old">Oldest first</option><option value="title">Title A–Z</option></select></div>
+ <div class="table-wrap"><table><thead><tr><th>Employee</th><th>Document</th><th>Date</th><th>Actions</th></tr></thead><tbody id="docBody"></tbody></table></div>`;
+ renderMyDocs();
+}
+function showMyProfile(){
+ if(!currentUser)return;
+ setActivePage("my-profile");
+ document.getElementById("pageContent").innerHTML=`<div class="hero"><div><h1>My Profile</h1><p>View your account details and manage your profile picture.</p></div></div>
+ <section class="profile-card">
+  <div class="profile-picture-wrap">${avatarMarkup(currentUser,"profile-avatar")}<button class="profile-picture-edit material-symbols-rounded" type="button" title="Add or change profile picture" aria-label="Add or change profile picture" onclick="document.getElementById('profileImageInput').click()">edit</button></div>
+  <input id="profileImageInput" class="hidden" type="file" accept="image/*" aria-label="Choose profile picture" onchange="updateProfileImage(event)">
+  <div class="profile-fields">
+   <div class="profile-field"><label for="profileName">Full Name</label><input id="profileName" value="${esc(currentUser.name)}" readonly></div>
+   <div class="profile-field"><label for="profileRole">Role</label><input id="profileRole" value="${esc(currentUser.role)}" readonly></div>
+   <div class="profile-field"><label for="profileEmail">Email Address</label><input id="profileEmail" type="email" value="${esc(currentUser.email)}" readonly></div>
+  </div>
+ </section>`;
+}
+function updateProfileImage(event){
+ const input=event.currentTarget;
+ const file=input.files?.[0];
+ if(!file)return;
+ if(!file.type.startsWith("image/")){toast("Choose an image file for your profile picture.",true);input.value="";return}
+ if(file.size>5*1024*1024){toast("Profile pictures must be smaller than 5 MB.",true);input.value="";return}
+ const reader=new FileReader();
+ reader.onerror=()=>{toast("The selected profile picture could not be read.",true);input.value=""};
+ reader.onload=()=>{
+  if(typeof reader.result!=="string"){toast("The selected profile picture could not be read.",true);input.value="";return}
+  const image=new Image();
+  image.onerror=()=>{toast("The selected file is not a supported image.",true);input.value=""};
+  image.onload=()=>{
+   const scale=Math.min(1,512/Math.max(image.naturalWidth,image.naturalHeight));
+   const canvas=document.createElement("canvas");
+   canvas.width=Math.max(1,Math.round(image.naturalWidth*scale));
+   canvas.height=Math.max(1,Math.round(image.naturalHeight*scale));
+   const context=canvas.getContext("2d");
+   if(!context){toast("Your browser could not process this profile picture.",true);input.value="";return}
+   context.fillStyle="#ffffff";
+   context.fillRect(0,0,canvas.width,canvas.height);
+   context.drawImage(image,0,0,canvas.width,canvas.height);
+   let imageData;
+   try{imageData=canvas.toDataURL("image/jpeg",0.85)}
+   catch(error){toast("Your browser could not process this profile picture.",true);input.value="";return}
+   const email=currentUser.email.trim().toLowerCase(),previousImage=profileImages[email];
+   profileImages[email]=imageData;
+   if(!persistProfileImages()){
+    if(previousImage===undefined)delete profileImages[email];else profileImages[email]=previousImage;
+    input.value="";
+    return;
+   }
+   setCurrentUser({...currentUser,profileImage:imageData});
+   const headerAvatar=document.querySelector(".profile .avatar");
+   if(headerAvatar)headerAvatar.outerHTML=avatarMarkup(currentUser);
+   if(document.querySelector('[data-page="my-profile"].active'))showMyProfile();
+   toast("Profile picture updated.");
+  };
+  image.src=reader.result;
+ };
+ reader.readAsDataURL(file);
+}
+function renderMyDocs(){
+ const email=String(currentUser?.email||"").trim().toLowerCase();
+ const mine=accessibleDocuments().filter(d=>String(d.employeeEmail||"").trim().toLowerCase()===email);
+ renderDocs(mine,"You haven't uploaded any documents yet.");
+}
+function refreshDocumentView(){
+ if(document.querySelector('[data-page="my-documents"].active')){renderMyDocs();return}
+ renderStats();renderDocs();
+}
+function openUpload(){
+ openModal("Upload Document",`<form id="uploadForm" class="form-grid">
+ <div class="field"><label>Employee</label><input value="${esc(currentUser.name)}" disabled></div>
+ <div class="field"><label>Document Title *</label><input id="docTitle" required placeholder="e.g. Monthly Engineering Report"></div>
+ <div class="field"><label>Description *</label><textarea id="docDesc" required placeholder="Briefly describe this document"></textarea></div>
+ <div class="filebox"><b>Select document</b><br><small>PDF, Office, TXT, JPG or PNG · Max 8 MB</small><br><input id="fileInput" type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.jpg,.jpeg,.png" required><div class="file-name" id="fileName">No file chosen</div></div>
+ </form>`,`<button class="btn ghost" type="button" onclick="closeModal()">Cancel</button><button class="btn primary" type="submit" form="uploadForm">Submit Document</button>`);
+ document.getElementById("uploadForm").onsubmit=submitUpload;
+ document.getElementById("fileInput").onchange=event=>{document.getElementById("fileName").textContent=event.currentTarget.files[0]?.name||"No file chosen"};
+}
+function submitUpload(event){
+ event.preventDefault();
+ const form=document.getElementById("uploadForm");
+ if(!form.reportValidity())return;
+ const f=document.getElementById("fileInput").files[0];
+ if(!f)return;
+ if(f.size>8*1024*1024){toast("File is larger than 8 MB.",true);return}
+ const submitButton=document.querySelector('#modalRoot button[type="submit"]');
+ submitButton.disabled=true;
+ const reader=new FileReader();
+ reader.onload=()=>{
+  if(typeof reader.result!=="string"){submitButton.disabled=false;toast("The selected file could not be read.",true);return}
+  documents.unshift({id:uid(),employeeName:currentUser.name,employeeRole:currentUser.role,employeeEmail:currentUser.email,employeeAddress:currentUser.address,documentTitle:document.getElementById("docTitle").value.trim(),description:document.getElementById("docDesc").value.trim(),fileName:f.name,fileType:f.type||"application/octet-stream",fileSize:f.size,fileData:reader.result,uploadDate:new Date().toISOString(),comments:[]});
+  persist();closeModal();refreshDocumentView();toast("Document uploaded successfully");
+ };
+ reader.onerror=()=>{submitButton.disabled=false;toast("The selected file could not be read. Please try again.",true)};
+ reader.readAsDataURL(f);
+}
+function getDoc(id){return documents.find(d=>d.id===id&&canAccessDocument(d))}
+function viewDoc(id){const d=getDoc(id);if(!d){toast("You don't have permission to view this document.",true);return}let content=d.fileData?((d.fileType.startsWith("image/"))?`<img src="${d.fileData}" alt="Document preview">`:d.fileType==="application/pdf"?`<iframe src="${d.fileData}"></iframe>`:`<div><b>Preview unavailable for this format.</b><p>${esc(d.fileName)}</p><button class="btn primary" onclick="downloadDoc('${id}')">Download file</button></div>`):`<div><b>Preview unavailable</b><p>This sample document does not contain file data.</p></div>`;openModal("View Document",`<div class="preview">${content}</div><div style="margin-top:14px"><b>${esc(d.documentTitle)}</b><div class="sub">${esc(d.fileName)} · ${fmtBytes(d.fileSize)}</div></div>`,"", "large")}
+function downloadDoc(id){const d=getDoc(id);if(!d){toast("You don't have permission to download this document.",true);return}if(!d.fileData){toast("This sample file has no downloadable data.",true);return}const a=document.createElement("a");a.href=d.fileData;a.download=d.fileName;a.click();toast("Download started")}
+function commentDoc(id){const d=getDoc(id);if(!d){toast("You don't have permission to comment on this document.",true);return}openModal("Add Comment",`<div class="field"><label>Commenter</label><input value="${esc(currentUser.name)} — ${esc(currentUser.role)}" disabled></div><div class="field" style="margin-top:15px"><label>Comment *</label><textarea id="commentText" placeholder="Write your comment..." required></textarea></div>`,`<button class="btn ghost" onclick="closeModal()">Cancel</button><button class="btn primary" onclick="submitComment('${id}')">Add Comment</button>`)}
+function submitComment(id){const d=getDoc(id);if(!d){toast("You don't have permission to comment on this document.",true);return}const text=document.getElementById("commentText").value.trim();if(!text){toast("Please enter a comment.",true);return}d.comments=d.comments||[];d.comments.push({id:uid(),commenterName:currentUser.name,commenterRole:currentUser.role,comment:text,date:new Date().toISOString()});persist();closeModal();refreshDocumentView();toast("Comment added")}
+function infoDoc(id){const d=getDoc(id);if(!d){toast("You don't have permission to view this document.",true);return}const comments=d.comments||[];const commentHTML=comments.length?comments.map(c=>`<div class="comment"><div class="comment-head"><div><div class="comment-name">${esc(c.commenterName)}</div><div class="comment-role">${esc(c.commenterRole)}</div></div><div class="comment-date">${fmtDate(c.date)}</div></div><p class="comment-text">${esc(c.comment)}</p></div>`).join(""):`<p class="sub">No comments yet.</p>`;openModal("Document Information",`<div class="detail-grid"><div class="preview">${d.fileData?(d.fileType==="application/pdf"?`<iframe src="${d.fileData}"></iframe>`:d.fileType.startsWith("image/")?`<img src="${d.fileData}" alt="">`:`<div>Preview unavailable<br><button class="btn secondary" onclick="downloadDoc('${id}')">Download</button></div>`):`<div>Document preview unavailable</div>`}</div><div class="meta"><h2>${esc(d.documentTitle)}</h2><p>${esc(d.description)}</p><div class="meta-row"><b>Uploaded by</b>${esc(d.employeeName)}</div><div class="meta-row"><b>Role</b>${esc(d.employeeRole)}</div><div class="meta-row"><b>Date</b>${fmtDate(d.uploadDate)}</div><div class="meta-row"><b>File</b>${esc(d.fileName)} · ${fmtBytes(d.fileSize)}</div></div></div><div class="comments"><h3>Comments (${comments.length})</h3>${commentHTML}</div>`)}
+function deleteDoc(id){const d=getDoc(id);if(!d){toast("You don't have permission to delete this document.",true);return}openModal("Delete Document",`<p>Are you sure you want to permanently delete <b>${esc(d.documentTitle)}</b>?</p><p class="sub">This action cannot be undone.</p>`,`<button class="btn ghost" onclick="closeModal()">Cancel</button><button class="btn danger" onclick="confirmDelete('${id}')">Delete Document</button>`)}
+function confirmDelete(id){if(!getDoc(id)){toast("You don't have permission to delete this document.",true);return}documents=documents.filter(d=>d.id!==id);persist();closeModal();refreshDocumentView();toast("Document deleted")}
+function logout(){sessionStorage.removeItem(USER);currentUser=null;loginScreen()}
+load();
+currentUser=null;
+sessionStorage.removeItem(USER);
+loginScreen();
+document.addEventListener("click",closeDocumentActionMenus);
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeDocumentActionMenus();closeModal()}});
+</script>
+</body>
+</html>
