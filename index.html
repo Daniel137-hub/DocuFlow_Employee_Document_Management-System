@@ -23,7 +23,9 @@ button,input,textarea,select{font:inherit}button{cursor:pointer;border:0}.hidden
 @media(max-width:1050px){.stats{grid-template-columns:repeat(2,1fr)}.sidebar{width:220px}.main{margin-left:220px;width:calc(100% - 220px)}.detail-grid{grid-template-columns:1fr}}
 @media(max-width:760px){.sidebar{transform:translateX(-100%);transition:.25s;width:250px}.sidebar.open{transform:none}.main{margin-left:0;width:100%}.mobile-menu{display:grid;width:38px;height:38px;border-radius:9px;background:#eef4ff;color:#2456b8;place-items:center}.topbar{padding:0 15px}.top-left{display:flex;align-items:center;gap:10px}.profile .ptext{display:none}.content{padding:18px 14px}.hero{align-items:flex-start;flex-direction:column}.hero .btn{width:100%}.stats{grid-template-columns:repeat(2,1fr);gap:10px}.stat{padding:14px}.stat strong{font-size:23px}.table-wrap{border:0;background:transparent;box-shadow:none}.table-wrap table,.table-wrap thead,.table-wrap tbody,.table-wrap tr,.table-wrap td{display:block}.table-wrap thead{display:none}.table-wrap tr{background:#fff;border:1px solid var(--line);border-radius:15px;margin-bottom:11px;padding:8px;box-shadow:0 7px 20px rgba(16,35,63,.05)}.table-wrap td{border:0;padding:7px 9px}.table-wrap td[data-label]::before{content:attr(data-label);display:block;font-size:10px;text-transform:uppercase;color:#8a95a6;font-weight:800;margin-bottom:2px}.actions{padding-top:9px!important}.toolbar{padding:10px}.toolbar select{flex:1}.search{min-width:100%}.login-card{padding:26px}.modal-body{padding:17px}}
 .actions-wide{display:flex;gap:5px}.actions-compact{display:none;position:relative;flex:1;justify-content:flex-end}.action-menu{position:absolute;top:calc(100% + 6px);right:0;z-index:30;min-width:170px;padding:5px;background:#fff;border:1px solid var(--line);border-radius:11px;box-shadow:0 10px 28px rgba(16,35,63,.18)}.action-menu.open{display:grid}.action-menu.open-up{top:auto;bottom:calc(100% + 6px)}.action-menu button{display:flex;align-items:center;gap:10px;width:100%;padding:9px 11px;border-radius:8px;background:transparent;color:var(--text);text-align:left;white-space:nowrap;font-size:13px}.action-menu button:hover{background:#eef4ff;color:#1d4ed8}.action-menu button .material-symbols-rounded{font-size:19px}.action-menu button.delete-action:hover{background:#fff0f1;color:var(--red)}
+.action-menu{display:none}
 @media(max-width:1050px){.actions-wide{display:none}.actions-compact{display:flex}.table-wrap{overflow:visible}}
+@media(max-width:760px){.table-wrap.document-table{overflow-x:auto;overflow-y:hidden;border:1px solid var(--line);background:#fff;box-shadow:var(--shadow)}.table-wrap.document-table table{display:table;min-width:700px}.table-wrap.document-table thead{display:table-header-group}.table-wrap.document-table tbody{display:table-row-group}.table-wrap.document-table tr{display:table-row;background:transparent;border:0;border-radius:0;margin:0;padding:0;box-shadow:none}.table-wrap.document-table td{display:table-cell;border-bottom:1px solid var(--line);padding:16px}.table-wrap.document-table td[data-label]::before{display:none}.table-wrap.document-table .actions{padding-top:0!important}}
 </style>
 <style>
 .material-symbols-rounded{font-family:"Material Symbols Rounded";font-weight:normal;font-style:normal;font-size:20px;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr;-webkit-font-feature-settings:"liga";-webkit-font-smoothing:antialiased}
@@ -36,7 +38,6 @@ button,input,textarea,select{font:inherit}button{cursor:pointer;border:0}.hidden
 
 <script>
 const KEY="docuflow_documents_v1", USER="docuflow_user_v1", EMPLOYEE_REGISTRY_KEY="docuflow_employee_registry_v1", PROFILE_IMAGES_KEY="docuflow_profile_images_v1", PASSWORD_ITERATIONS=120000;
-const SUPABASE_URL="", SUPABASE_ANON_KEY="";
 let documents=[], employees=[], employeeRequests=[], credentials={}, profileImages={}, currentUser=null;
 
 const sampleDocs=[
@@ -129,10 +130,9 @@ function openModal(title,body,foot="",cls=""){document.getElementById("modalRoot
 function closeModal(){document.getElementById("modalRoot").innerHTML=""}
 
 function loginScreen(){
- const approvalNotice=new URLSearchParams(window.location.search).get("approved")==="1";
  document.getElementById("app").innerHTML=`<main class="login"><section class="login-card">
  <div class="logo"><span class="logo-mark">D</span> DocuFlow</div>
-<h1>${approvalNotice?"Account approved":"Welcome back"}</h1><p>${approvalNotice?"Your account has been approved. Sign in with your email and password to access DocuFlow.":"Sign in to your employee document hub."}</p>
+<h1>Welcome back</h1><p>Sign in to your employee document hub.</p>
  <form class="form-grid" id="loginForm">
  <div class="field"><label for="loginEmail">Email Address</label><input id="loginEmail" type="email" autocomplete="username" required placeholder="name@company.com"></div>
  <div class="field"><label for="loginPassword">Password</label><div class="password-input-wrap"><input id="loginPassword" type="password" autocomplete="current-password" required><button class="password-toggle" type="button" aria-label="Show password" aria-pressed="false" onclick="togglePasswordVisibility('loginPassword',this)"><span class="material-symbols-rounded" aria-hidden="true">visibility</span></button></div></div>
@@ -279,7 +279,7 @@ function showDashboard(){
  document.getElementById("pageContent").innerHTML=`<div class="hero"><div><h1>Good day, ${esc(currentUser.name.split(" ")[0])}</h1><p>Manage your team's documents and keep feedback organized.</p></div><button class="btn primary" onclick="openUpload()">＋ Upload Document</button></div>
  <div class="stats" id="stats"></div>
  <div class="toolbar"><div class="search"><input id="search" placeholder="Search documents, employees, descriptions..." oninput="renderDocs()"></div><select id="sort" onchange="renderDocs()"><option value="new">Newest first</option><option value="old">Oldest first</option><option value="title">Title A–Z</option><option value="employee">Employee A–Z</option></select></div>
- <div class="table-wrap"><table><thead><tr><th>Employee</th><th>Document</th><th>Date</th><th>Actions</th></tr></thead><tbody id="docBody"></tbody></table></div>
+ <div class="table-wrap document-table"><table><thead><tr><th>Employee</th><th>Document</th><th>Date</th><th>Actions</th></tr></thead><tbody id="docBody"></tbody></table></div>
  <p style="text-align:center;color:#8995a7;font-size:11px;margin:18px 0 0">DocuFlow browser prototype · Uploaded files and records are stored locally in this browser.</p>`;
  renderStats();renderDocs();
 }
@@ -323,47 +323,21 @@ function approveRequest(id){
  if(!isManager())return;
  const request=employeeRequests.find(item=>item.id===id&&item.status==="pending");
  if(!request)return;
- openModal("Approve Employee",`<p>Send an account approval email to <b>${esc(request.name)}</b> at <b>${esc(request.email)}</b>?</p><form id="approveRequestForm" class="form-grid"><div class="field"><label for="approvalPassword">Manager Password</label><div class="password-input-wrap"><input id="approvalPassword" type="password" autocomplete="current-password" required><button class="password-toggle" type="button" aria-label="Show password" onclick="togglePasswordVisibility('approvalPassword',this)"><span class="material-symbols-rounded" aria-hidden="true">visibility</span></button></div></div></form>`,`<button class="btn ghost" type="button" onclick="closeModal()">Cancel</button><button class="btn primary" type="submit" form="approveRequestForm">Send Email & Approve</button>`);
- document.getElementById("approveRequestForm").onsubmit=event=>submitApproval(event,id);
+ openModal("Approve Employee",`<p>Approve <b>${esc(request.name)}</b> (${esc(request.email)})? They will be able to sign in to DocuFlow.</p>`,`<button class="btn ghost" type="button" onclick="closeModal()">Cancel</button><button class="btn primary" type="button" onclick="confirmApproveRequest('${esc(request.id)}')">Approve Employee</button>`);
 }
-async function submitApproval(event,id){
- event.preventDefault();
+function confirmApproveRequest(id){
  if(!isManager())return;
- const form=event.currentTarget;
- if(!form.reportValidity())return;
  const request=employeeRequests.find(item=>item.id===id&&item.status==="pending");
  if(!request)return;
- const managerPassword=document.getElementById("approvalPassword").value;
- const submitButton=document.querySelector('#modalRoot button[type="submit"]');
- submitButton.disabled=true;
- try{
-  await sendApprovalEmail(request,managerPassword);
-  const previousEmployees=employees,previousRequests=employeeRequests;
-  if(!employeeByEmail(request.email))employees=[...employees,{id:request.id,name:request.name,role:request.role,email:request.email,address:request.address,requestDate:request.requestDate}];
-  employeeRequests=employeeRequests.filter(item=>item.id!==id);
-  if(!persistEmployeeRegistry()){
-   employees=previousEmployees;
-   employeeRequests=previousRequests;
-   toast("The email service accepted the message, but employee approval could not be saved. Do not resend until checking the employee list.",true);
-   return;
-  }
-  closeModal();showRequests();toast(`Approval email sent to ${request.email}.`);
- }catch(error){
-  toast(error instanceof Error?error.message:"Approval email could not be sent. The employee was not approved.",true);
- }finally{
-  if(submitButton.isConnected)submitButton.disabled=false;
+ const previousEmployees=employees,previousRequests=employeeRequests;
+ if(!employeeByEmail(request.email))employees=[...employees,{id:request.id,name:request.name,role:request.role,email:request.email,address:request.address,requestDate:request.requestDate}];
+ employeeRequests=employeeRequests.filter(item=>item.id!==id);
+ if(!persistEmployeeRegistry()){
+  employees=previousEmployees;
+  employeeRequests=previousRequests;
+  return;
  }
-}
-async function sendApprovalEmail(employee,managerPassword){
- if(!SUPABASE_URL||!SUPABASE_ANON_KEY)throw new Error("Approval email is not configured. Add the Supabase URL and anon key before approving employees.");
- const response=await fetch(`${SUPABASE_URL.replace(/\/+$/,"")}/functions/v1/send-approval-email`,{
-  method:"POST",
-  headers:{"Content-Type":"application/json","apikey":SUPABASE_ANON_KEY,"Authorization":`Bearer ${SUPABASE_ANON_KEY}`},
-  body:JSON.stringify({managerEmail:currentUser.email,managerPassword,employee:{name:employee.name,email:employee.email}})
- });
- let result;
- try{result=await response.json()}catch(error){throw new Error("Approval email service returned an invalid response.")}
- if(!response.ok)throw new Error(result.error||"Approval email could not be sent.");
+ closeModal();showRequests();toast(`${request.name}'s request was approved. They can now sign in.`);
 }
 function rejectRequest(id){
  if(!isManager())return;
@@ -445,7 +419,7 @@ function showMyDocs(){
  setActivePage("my-documents");
  document.getElementById("pageContent").innerHTML=`<div class="hero"><div><h1>My Documents</h1><p>Documents uploaded by ${esc(currentUser.name)}.</p></div><button class="btn primary" onclick="openUpload()">＋ Upload Document</button></div>
  <div class="toolbar"><div class="search"><input id="search" placeholder="Search your documents..." oninput="renderMyDocs()"></div><select id="sort" onchange="renderMyDocs()"><option value="new">Newest first</option><option value="old">Oldest first</option><option value="title">Title A–Z</option></select></div>
- <div class="table-wrap"><table><thead><tr><th>Employee</th><th>Document</th><th>Date</th><th>Actions</th></tr></thead><tbody id="docBody"></tbody></table></div>`;
+ <div class="table-wrap document-table"><table><thead><tr><th>Employee</th><th>Document</th><th>Date</th><th>Actions</th></tr></thead><tbody id="docBody"></tbody></table></div>`;
  renderMyDocs();
 }
 function showMyProfile(){
